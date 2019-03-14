@@ -29,8 +29,11 @@ def internal_server_error(e):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    # here we use session['name'] to share variable between requests, it's global-like
     form = NameForm()
     if form.validate_on_submit():
         session['name'] = form.name.data
+        # here is the redirect, after POST request(submission), redirect to index, so next time it will call GET if we
+        # refresh the page, and it won't re-POST the data
         return redirect(url_for('index'))
     return render_template('index.html', form=form, name=session.get('name'))
